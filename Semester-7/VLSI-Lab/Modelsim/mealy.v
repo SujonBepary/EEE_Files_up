@@ -1,0 +1,25 @@
+
+module mealy (clk, resetn, w, z);
+ input clk, resetn, w;
+output reg z;
+
+reg [2:1] y,Y;
+
+parameter [2:1] A=2'b00, B=2'b01;
+
+always@(w or y)
+begin	//NSOL
+	case(y)
+	A: if(w) Y=B;
+		else  Y=A;
+	B: if(w) Y=B;
+		else  Y=A;
+	default: Y=2'bxx;
+endcase
+if(y==B) z=1;
+else     z=0;
+end
+always@(negedge resetn or posedge clk)
+	if(~resetn) y<=A;
+	else y<=Y;
+endmodule
